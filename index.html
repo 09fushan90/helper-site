@@ -17,9 +17,18 @@
             opacity: 0;
             animation: fadeIn 2s forwards;
         }
+        p#text {
+            opacity: 0;
+            animation: fadeInText 2s forwards;
+            animation-delay: 2s;
+        }
         @keyframes fadeIn {
             0% { opacity: 0; color: rgba(255,255,255,0); transform: translateY(20px); }
             100% { opacity: 1; color: rgb(255,255,255); transform: translateY(0); }
+        }
+        @keyframes fadeInText {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
         button {
             padding: 12px 22px;
