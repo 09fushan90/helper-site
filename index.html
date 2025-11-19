@@ -67,6 +67,7 @@ button {
 #screen1 button:nth-of-type(2) { animation-delay: 1.6s; }
 #screen1 button:nth-of-type(3) { animation-delay: 1.9s; }
 #screen1 button:nth-of-type(4) { animation-delay: 2.2s; }
+#screen1 button:nth-of-type(5) { animation-delay: 2.5s; } /* кнопка Вийти */
 button:hover {
     transform: scale(1.1);
     box-shadow: 0 0 20px rgba(255,255,255,0.9);
@@ -142,6 +143,9 @@ input:focus {
     animation: modalShow 0.3s ease;
 }
 @keyframes modalShow { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+
+.adminBtn { display: none; background: purple; box-shadow: 0 0 10px purple; margin-top: 20px; }
+#logoutBtn { display: none; background: red; box-shadow: 0 0 10px red; margin-top: 20px; }
 </style>
 </head>
 <body>
@@ -155,6 +159,7 @@ input:focus {
     <button id="loginBtn" onclick="showLogin()">Увійти</button>
     <button id="registerBtn" onclick="register()">Зареєструватися</button>
     <button id="adminBtn" class="adminBtn" onclick="showUsersList()">Адмін панель</button>
+    <button id="logoutBtn" onclick="logout()">Вийти</button>
 </div>
 
 <div id="screen2" class="screen hidden">
@@ -219,7 +224,7 @@ function registerUser(){
     if(users.find(u=>u.email===email)){ showModal("Така пошта вже існує!"); return; }
     users.push({name,email,pass});
     localStorage.setItem("users", JSON.stringify(users));
-    localStorage.setItem("currentUser", JSON.stringify({name,email}));
+    localStorage.setItem("currentUser", JSON.stringify({name,email,pass}));
     showModal("Вітаємо з реєстрацією!");
     updateUserUI();
     showScreen("screen1");
@@ -236,12 +241,19 @@ function loginUser(){
     showScreen("screen1");
 }
 
+function logout(){
+    localStorage.removeItem("currentUser");
+    updateUserUI();
+    showScreen("screen1");
+}
+
 function updateUserUI(){
     const data = JSON.parse(localStorage.getItem("currentUser"));
     
     // По умолчанию показываем кнопки входа/регистрации
     document.getElementById("loginBtn").style.display="inline-block";
     document.getElementById("registerBtn").style.display="inline-block";
+    document.getElementById("logoutBtn").style.display="none";
     document.getElementById("adminBtn").style.display="none";
     document.getElementById("welcomeUser").innerText = "";
 
@@ -250,6 +262,7 @@ function updateUserUI(){
     document.getElementById("welcomeUser").innerText = "👋 Привіт, " + data.name + "!";
     document.getElementById("loginBtn").style.display="none";
     document.getElementById("registerBtn").style.display="none";
+    document.getElementById("logoutBtn").style.display="inline-block";
 
     if(data.email==="09fushan90@gmail.com"){
         document.getElementById("adminBtn").style.display="inline-block";
